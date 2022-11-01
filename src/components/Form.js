@@ -2,12 +2,12 @@ import styled from "styled-components";
 
 function Form({ className, onSubmit }) {
   const send = (event) => {
-    event.preventDefault()
+    event.preventDefault();
 
-    const formData = new FormData(event.target)
-    
-    onSubmit(Object.fromEntries(formData))
-  }
+    const formData = new FormData(event.target);
+
+    onSubmit(Object.fromEntries(formData));
+  };
 
   return (
     <form className={className} onSubmit={send}>
@@ -22,11 +22,12 @@ function Form({ className, onSubmit }) {
       <button type="submit">Submit</button>
       <button type="reset">Reset</button>
     </form>
-  )
+  );
 }
 
 const StyledForm = styled(Form)`
   background: lightgoldenrodyellow;
-`
+`;
 
-export default StyledForm
+export default StyledForm;
+export { StyledForm, Form };

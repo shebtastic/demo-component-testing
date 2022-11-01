@@ -1,70 +1,98 @@
-import { screen, render, getByText } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom"
+import { render, screen } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
 
 import Form from "./Form"
 
 describe("Form", () => {
-    it("should change value on input", async () => {
+    it("initial render", () => {
         render(<Form />)
 
-        const nameInput = screen.getByLabelText("Name:")
-        const emailInput = screen.getByLabelText("mail", { exact: false })
+        const nameInput = screen.getByLabelText(/name/i)
+        const emailInput = screen.getByLabelText(/e-mail/i)
 
         expect(nameInput).toHaveValue("")
         expect(emailInput).toHaveValue("")
+    })
 
-        await userEvent.type(nameInput, "Michael")
-        await userEvent.type(emailInput, "michael@test.com")
+    it("should change value on input", async () => {
+        render(<Form />)
+        const name = "Michael"
+        const email = "michael@test.com"
 
-        expect(nameInput).toHaveValue("Michael")
-        expect(emailInput).toHaveValue("michael@test.com")
+        const nameInput = screen.getByLabelText(/name/i)
+        const emailInput = screen.getByLabelText(/e-mail/i)
+
+        await userEvent.type(nameInput, name)
+        await userEvent.type(emailInput, email)
+
+        expect(nameInput).toHaveValue(name)
+        expect(emailInput).toHaveValue(email)
     })
 
     it("should trigger onSubmit prop on submit", async () => {
         const onSubmit = jest.fn()
 
-        render(<Form onSubmit={onSubmit}/>)
+        render(<Form onSubmit={onSubmit} />)
+        const name = "Michael"
+        const email = "michael@test.com"
 
+        const nameInput = screen.getByLabelText(/name/i)
+        const emailInput = screen.getByLabelText(/e-mail/i)
         const submitButton = screen.getByText("Submit")
 
+        await userEvent.type(nameInput, name)
+        await userEvent.type(emailInput, email)
         await userEvent.click(submitButton)
-
-        expect(onSubmit).toHaveBeenCalledTimes(1)
-        expect(onSubmit).toBeCalledWith({email: "", name: ""})
+        
+        expect(onSubmit).toHaveBeenCalled()
     })
 
     it("should forward form values on submit", async () => {
-        const onSubmit = jest.fn()
+        const onSubmit = jest.fn() //mocking function, brauchen wir für toHaveBeenCalled...()
 
-        render(<Form onSubmit={onSubmit}/>)
+        render(<Form onSubmit={onSubmit} />)
+        const name = "Michael"
+        const email = "michael@test.com"
 
+        const nameInput = screen.getByLabelText(/name/i)
+        const emailInput = screen.getByLabelText(/e-mail/i)
         const submitButton = screen.getByText("Submit")
-        const nameInput = screen.getByLabelText("Name:")
-        const emailInput = screen.getByLabelText("E-Mail:")
 
-        await userEvent.type(nameInput, "Michael")
-        await userEvent.type(emailInput, "michael@test.com")
+        await userEvent.type(nameInput, name)
+        await userEvent.type(emailInput, email)
         await userEvent.click(submitButton)
-
+        
         expect(onSubmit).toHaveBeenCalledTimes(1)
-        expect(onSubmit).toBeCalledWith({ name: "Michael", email: "michael@test.com"})
+        expect(onSubmit).toHaveBeenCalledWith({ name, email })
     })
-    //fuzzy testing
-    //kommt aus chaos engineering
 
     it("should initialize inputs on reset", async () => {
         render(<Form />)
-
+        const name = "Michael"
+        const email = "michael@test.com"
+        //womit fangen wir an - haben wir schon
+        const nameInput = screen.getByLabelText(/name/i)
+        const emailInput = screen.getByLabelText(/e-mail/i)
+        // screen.getByRole focussiert aria roles / also screenreader features
+        // screen.getByTestId sucht nach data-test-id attribute
         const resetButton = screen.getByText("Reset")
-        const nameInput = screen.getByLabelText("Name:")
-        const emailInput = screen.getByLabelText("E-Mail:")
-
-        await userEvent.type(nameInput, "Michael")
-        await userEvent.type(emailInput, "michael@test.com")
+        //erst was in name eintippen
+        await userEvent.type(nameInput, name)
+        //erst was in email eintippen
+        await userEvent.type(emailInput, email)
+        //steht auch was drin?
+        expect(nameInput).toHaveValue(name)
+        expect(emailInput).toHaveValue(email)
+        //reset button drücken
         await userEvent.click(resetButton)
-
+        //steht nichtsmehr drin?
         expect(nameInput).toHaveValue("")
         expect(emailInput).toHaveValue("")
+    })
+
+    it.todo("ein fall den ich testen würde, aber nicht getan habe")
+    it.skip("broken test", () => {
+        expect(true).toBe(false)
     })
 })

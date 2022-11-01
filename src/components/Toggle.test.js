@@ -1,61 +1,67 @@
-import { render, screen } from "@testing-library/react"
-import userEvent from "@testing-library/user-event"
-import "@testing-library/jest-dom"
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
-import Toggle from "./Toggle"
+import Toggle from "./Toggle";
 
 describe("Toggle", () => {
-    it("should have an initial value of 0 / off", () => {
-        render(<Toggle />)
+  it("renders without crashing", () => {
+    render(<Toggle />);
+    // screen.debug()
+  });
 
-        const input = screen.getByLabelText(/toggle is/i)
-        // const label = screen.getByText((content, element) => {
-        //     // console.log({content, tagName: element.tagName, textContent: element.textContent, match: element.textContent.match(/toggle\sis/i)})
-        //     if(element.tagName.toLowerCase() === "label") {
-        //         return element.textContent.match(/toggle\sis/i) !== null
-        //         // backslashes mit shift + option + 7
-        //     }
-        // })
-        const label = screen.getByTestId("toggle-label")
-        // screen.debug()
+  it("should have an initial value of 0 / off", () => {
+    //given
+    render(<Toggle />);
 
-        // const test = "test"
-        // test.startsWith("te")
-        // string.match(/test [a-z0-9]/)
+    //when
+    // /i für caseInsensitive
+    const label = screen.getByText(/the toggle is/i); //regex - regular expression - regulärer ausdruck
+    const input = screen.getByLabelText(/the toggle is/i);
 
-        expect(input).toHaveValue("0")
-        expect(label.textContent).toContain("off")
-    })
+    //then
+    // screen.debug()
+    expect(label.textContent).toContain("off");
+    expect(input).toHaveValue("0");
+  });
 
-    it("should change value on click", async () => {
-        render(<Toggle />)
+  it("should change value on click", async () => {
+    //given
+    render(<Toggle />);
 
-        const input = screen.getByLabelText(/toggle is/i)
+    //when
+    // /i für caseInsensitive
+    const label = screen.getByText(/the toggle is/i); //regex - regular expression - regulärer ausdruck
+    const input = screen.getByLabelText(/the toggle is/i);
 
-        await userEvent.click(input)
+    await userEvent.click(input)
 
-        expect(input).toHaveValue("1")
-    })
+    //then
+    // screen.debug()
+    expect(label.textContent).toContain("on");
+    expect(input).toHaveValue("1");
+  });
 
-    it("should handle multiple clicks", async () => {
-        render(<Toggle />)
+  it("should handle multiple clicks", async () => {
+    render(<Toggle />)
 
-        const input = screen.getByLabelText(/toggle is/i)
+    const input = screen.getByLabelText(/toggle is/i)
 
-        await userEvent.click(input)
-
-        expect(input).toHaveValue("1")
-
-        await userEvent.click(input)
-
-        expect(input).toHaveValue("0")
-
-        await userEvent.click(input)
-
-        expect(input).toHaveValue("1")
-
-        await userEvent.click(input)
-
-        expect(input).toHaveValue("0")
-    })
-})
+    expect(input).toHaveValue("0")
+    await userEvent.click(input)
+    expect(input).toHaveValue("1")
+    await userEvent.click(input)
+    expect(input).toHaveValue("0")
+    await userEvent.click(input)
+    expect(input).toHaveValue("1")
+    await userEvent.click(input)
+    expect(input).toHaveValue("0")
+    await userEvent.click(input)
+    expect(input).toHaveValue("1")
+    await userEvent.click(input)
+    expect(input).toHaveValue("0")
+    await userEvent.click(input)
+    expect(input).toHaveValue("1")
+    await userEvent.click(input)
+    expect(input).toHaveValue("0")
+  })
+});

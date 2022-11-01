@@ -16,13 +16,22 @@ function Toggle({ className }) {
         readOnly
       />
       <label htmlFor="toggle" data-testid="toggle-label">
-        <span>the toggle</span>&nbsp;<span>{value ? "is on!" : "is off."}</span>
+        <span>The Toggle {value ? "is on!" : "is off."}</span>
       </label>
     </div>
   )
 }
 
-const StyledToggle = styled(Toggle)`
+// function StyledToggle2() {
+//   // import './styles.css'
+//   return <Toggle className={"ksjdflkshdflk"} />
+// }
+
+// function Container() {
+//   return <div className="dkfjhklfdgkjhsd"></div>
+// }
+
+const StyledToggle = styled(Toggle)` 
   display: flex;
   align-items: center;
   justify-content: center;
